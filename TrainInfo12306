@@ -1,0 +1,54 @@
+//get target table
+tables=document.querySelectorAll('table');
+myTable=tables[1];
+head=myTable.tHead;
+body=myTable.tBodies[0];
+//get colNames
+headCells=head.rows[0].cells;
+colNames=new Array();
+for(var i=0;i<headCells.length;i++)
+{
+    tempText=$(headCells[i]).text();
+    colNames.push(tempText);
+}
+//get info
+trainInfo=new Array();
+infoRows=body.querySelectorAll('tr:nth-child(odd)')
+for(var i=0;i<infoRows.length;i++)
+    {
+        infoObj=new Object();
+        trainInfo.push(infoObj);
+        curRow=infoRows[i];
+        for(var j=0;j<colNames.length;j++)
+        {
+            if(j<=3)
+            {
+                cell=curRow.cells[0]
+                colName=colNames[j];
+                if(j==0)
+                    value=$(cell.querySelector('div.train a')).text();
+                else if(j==1)
+                {
+                    startStation=$(cell.querySelectorAll('div.cdz strong')[0]).text();
+                    endStation=$(cell.querySelectorAll('div.cdz strong')[1]).text();
+                    value=startStation+'-'+endStation;
+                }
+                else if(j==2)
+                {
+                    startTime=$(cell.querySelector('strong.start-t')).text();
+                    endTime=$(cell.querySelector('strong.color999')).text();
+                    value=startTime+'-'+endTime;   
+                }
+                else
+                    value=$(cell.querySelector('div.ls')).text();
+                infoObj[colName]=value;
+            }
+            else
+            {
+                colName=colNames[j];
+                curCell=curRow.cells[j-3];
+                value=$(curCell).text();
+                infoObj[colName]=value;
+            }
+        }
+    }
